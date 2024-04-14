@@ -50,5 +50,5 @@ class Clients:
 with open('booking.txt', encoding='utf-8') as f:
     for n in f:
         Clients(n)
-print(Clients.data_arrs)
+
 
