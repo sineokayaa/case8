@@ -49,6 +49,16 @@ class Clients:
         Clients.data_arrs.append(self.data_arr)
         Clients.days.append(self.days)
         Clients.sums.append(self.sum)
+    def placing_people(self):
+        option = []
+        prices_of_options = {}
+        for i in Hotel.max_ppls:
+            if i == self.pl:
+                option.apppend(Hotel.max_ppls.index(i)+1)
+        if not option:
+            for number in option:
+                prices_of_options[number] = Hotel.price_of_room[number]
+            prices_of_options = sorted(prices_of_options.items(),key=lambda x: x[1])
 
 
 
