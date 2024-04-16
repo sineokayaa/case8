@@ -89,8 +89,6 @@ class Clients:
         option = []
 
         prices_of_options = {}
-        summ_of_room = 0
-        summ_of_food = 0
         number_chosen = 0
         food_chosen = ''
         need_dates = Clients.need_dates(self)
@@ -219,12 +217,20 @@ with open('results.txt', 'w', encoding='utf-8') as res:
         print(f'Количество свободных номеров на {day}: {len(Hotel.nums) - count_booked}', file=res)
         print(f'Процент загруженности гостиницы на {day}: {round(count_booked / len(Hotel.nums) * 100, 2)}%', file=res)
         print(
-            f'Процент загруженности одноместных номеров на {day}: {round(count_one_place_b / Hotel.count_one_place * 100, 2)}%', file=res)
+            f'Процент загруженности одноместных номеров на {day}: '
+            f'{round(count_one_place_b / Hotel.count_one_place * 100, 2)}%',
+            file=res)
         print(
-            f'Процент загруженности двухместных номеров на {day}: {round(count_second_place_b / Hotel.count_second_place * 100, 2)}%', file=res)
+            f'Процент загруженности двухместных номеров на {day}: '
+            f'{round(count_second_place_b / Hotel.count_second_place * 100, 2)}%',
+            file=res)
         print(
-            f'Процент загруженности полулюкс номеров на {day}: {round(count_semiluxe_b / Hotel.count_semiluxe * 100, 2)}%', file=res)
-        print(f'Процент загруженности люкс номеров на {day}: {round(count_luxe_b / Hotel.count_luxe * 100, 2)}%', file=res)
+            f'Процент загруженности полулюкс номеров на {day}:'
+            f' {round(count_semiluxe_b / Hotel.count_semiluxe * 100, 2)}%',
+            file=res)
+        print(f'Процент загруженности люкс номеров на {day}: '
+              f'{round(count_luxe_b / Hotel.count_luxe * 100, 2)}%',
+              file=res)
         print(f'Полученный доход за {day}: {Clients.data_income[day]}', file=res)
         print(f'Упущенный доход за {day}: {Clients.data_without_income[day]}', file=res)
         print(file=res)
