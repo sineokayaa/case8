@@ -73,25 +73,20 @@ class Clients:
         number_chosen = 0
         food_chosen = ''
         need_dates = Clients.need_dates(self)
-        print(need_dates)
-        for i in Hotel.max_ppls:
-            if str(i) == self.pl:
-                #print(need_dates)
-                #print(Hotel.booked_dates[Hotel.max_ppls.index(i)])
-                print(f'aaaa {Hotel.booked_dates[Hotel.max_ppls[i]-1]}')
-                if set(need_dates) & set(Hotel.booked_dates[Hotel.max_ppls[i]-1]) == set():
-                    option.append(Hotel.max_ppls[i] + 1)
-        print(option)
-        if not option:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
+        for i in Hotel.max_ppls:  # num of room
+            if str(Hotel.max_ppls[i]) == self.pl:
+                if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
+                    option.append(i)
+
+        if option != []:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
             for number in option:
                 prices_of_options[number] = Hotel.price_of_room[number]  # соединяем номер с его ценой
             prices_of_options = dict(
                 sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))  # сначала самые дорогие номера
-            #print(prices_of_options)
             for room in prices_of_options:
                 if prices_of_options[room] <= int(self.sum) * int(self.pl):
                     number_chosen = room
-                    summ_of_room = prices_of_options[room] * int(self.pl)
+                    summ_of_room = prices_of_options[room]
                     summ_of_food = int(self.sum) * int(self.pl) - summ_of_room
                     for j in Hotel.food_price:
                         if summ_of_food < Hotel.food_price[j] * int(self.pl):
@@ -103,29 +98,31 @@ class Clients:
                         f'{self.name}, мы можем вам предложить следующий вариант: Номер комнаты: {number_chosen}, '
                         f'Степень комфортности: {Hotel.comforts[number_chosen - 1]}, Вид питания: {food_chosen}')
                     answer = random.choices(['Да', 'Нет'], weights=[75, 25])
-                    if answer == 'Да':
-                        Hotel.booked_dates[room - 1].append(need_dates)
+                    if answer == ['Да']:
+                        Hotel.booked_dates[room - 1] += need_dates
+                        break
                     else:
+                        print(f'{self.name}, хорошо, поищем другие варианты 1')
                         continue
                 else:
                     continue
             if number_chosen == 0:
-                print('Не можем вас заселить')
+                print(f'{self.name}, не можем вас заселить')
         else:
             for i in Hotel.max_ppls:
-                if i == int(self.pl) + 1:
-                    if set(need_dates) & set(Hotel.booked_dates[Hotel.max_ppls[i]]) == set():
-                        option.append(Hotel.max_ppls[i] + 1)
-            if not option:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
+                if Hotel.max_ppls[i] == int(self.pl) + 1:
+                    if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
+                        option.append(i)
+
+            if option != []:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
                 for number in option:
-                    prices_of_options[number] = Hotel.price_of_room[number]  # соединяем номер с его ценой
+                    prices_of_options[number] = Hotel.price_of_room[number] * 0.7 # соединяем номер с его ценой
                 prices_of_options = dict(
                     sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))  # сначала самые дорогие номера
-                #print(prices_of_options)
                 for room in prices_of_options:
                     if prices_of_options[room] <= int(self.sum) * int(self.pl):
                         number_chosen = room
-                        summ_of_room = prices_of_options[room] * int(self.pl)
+                        summ_of_room = prices_of_options[room]
                         summ_of_food = int(self.sum) * int(self.pl) - summ_of_room
                         for j in Hotel.food_price:
                             if summ_of_food < Hotel.food_price[j] * int(self.pl):
@@ -137,20 +134,22 @@ class Clients:
                             f'{self.name}, мы можем вам предложить следующий вариант: Номер комнаты: {number_chosen}, '
                             f'Степень комфортности: {Hotel.comforts[number_chosen - 1]}, Вид питания: {food_chosen}')
                         answer = random.choices(['Да', 'Нет'], weights=[75, 25])
-                        if answer == 'Да':
-                            Hotel.booked_dates[room - 1].append(need_dates)
+                        if answer == ['Да']:
+                            Hotel.booked_dates[room - 1] += need_dates
+                            break
                         else:
+                            print(f'{self.name}, хорошо, поищем другие варианты 0 ')
                             continue
                     else:
                         continue
                 if number_chosen == 0:
-                    print('Не можем вас заселить')
+                    print(f'{self.name}, не можем вас заселить')
 
 
 with open('booking.txt', encoding='utf-8') as f:
     for n in f:
         client = Clients(n)
-        #print(client.need_dates())
+        # print(client.need_dates())
         client.placing_people()
 
-#print(Hotel.price_of_room)
+# print(Hotel.price_of_room)
