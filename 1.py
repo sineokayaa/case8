@@ -213,6 +213,7 @@ with open('results.txt', 'w', encoding='utf-8') as res:
                     count_luxe_b += 1
                 count_booked += 1
 
+
         print(f'Количество занятых номеров на {day}: {count_booked}', file=res)
         print(f'Количество свободных номеров на {day}: {len(Hotel.nums) - count_booked}', file=res)
         print(f'Процент загруженности гостиницы на {day}: {round(count_booked / len(Hotel.nums) * 100, 2)}%', file=res)
