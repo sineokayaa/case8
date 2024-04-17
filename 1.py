@@ -127,7 +127,7 @@ class Clients:
                         print(f'{self.name}, хорошо, поищем другие варианты')
                         if room == list(prices_of_options.keys())[-1]:
                             for dates in need_dates:
-                                Clients.data_without_income[dates] += int(self.sum)
+                                Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
                             print(f'{self.name}, не можем вас заселить')
                         else:
                             continue
@@ -135,7 +135,7 @@ class Clients:
                     continue
             if number_chosen == 0:
                 for dates in need_dates:
-                    Clients.data_without_income[dates] += int(self.sum)
+                    Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
                 print(f'{self.name}, не можем вас заселить')
         else:
             for i in Hotel.max_ppls:
@@ -173,7 +173,7 @@ class Clients:
                             print(f'{self.name}, хорошо, поищем другие варианты')
                             if room == list(prices_of_options.keys())[-1]:
                                 for dates in need_dates:
-                                    Clients.data_without_income[dates] += int(self.sum)
+                                    Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
                                 print(f'{self.name}, не можем вас заселить')
                             else:
                                 continue
@@ -181,11 +181,11 @@ class Clients:
                         continue
                 if number_chosen == 0:
                     for dates in need_dates:
-                        Clients.data_without_income[dates] += int(self.sum)
+                        Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
                     print(f'{self.name}, не можем вас заселить')
             else:
                 for dates in need_dates:
-                    Clients.data_without_income[dates] += int(self.sum)
+                    Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
                 return (f'{self.name}, не можем вас заселить')
 
 
