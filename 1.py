@@ -3,6 +3,33 @@ import RU_LOCAL as RU
 
 
 class Hotel:
+    '''
+    This class describes a hotel with various attributes.
+
+    Attributes
+    -----------
+    - price_of_room: a dictionary storing the prices of different types of rooms.
+    - nums: a list containing the numbers of rooms.
+    - types: a list containing the types of rooms.
+    - max_ppls: a dictionary mapping room numbers to their maximum occupancy.
+    - comforts: a list storing the comfort levels of rooms.
+    - booked_dates: a list storing booked dates for each room.
+    - price_type: a dictionary with prices for each room type.
+    - comfort_price: a dictionary with price multipliers based on comfort level.
+    - food_price: a dictionary with prices for different meal plans.
+    - count_one_place: a counter for single rooms.
+    - count_second_place: a counter for double rooms.
+    - count_semiluxe: a counter for semi-luxe rooms.
+    - count_luxe: a counter for deluxe rooms.
+
+    Methods
+    --------
+    __init__(self, ptr): Initializes a room object with the given parameters.
+
+    Parameters
+    -----------
+    - ptr: a string containing room information to be parsed.
+    '''
     price_of_room = {}
     nums = []
     types = []
@@ -18,6 +45,20 @@ class Hotel:
     count_luxe = 0
 
     def __init__(self, ptr):
+        '''
+        Initialize a room object with the given parameters.
+
+        Parameters
+        -----------
+        - ptr: a string containing room information to be parsed.
+
+        Attributes
+        -----------
+        - num: an integer storing the room number.
+        - type: a string representing the room type.
+        - max_ppl: an integer representing the maximum occupancy of the room.
+        - comfort: a string representing the comfort level of the room.
+        '''
         ptr = ptr.split()
         self.num = int(ptr[0])
         self.type = ptr[1]
@@ -45,6 +86,20 @@ with open('fund.txt', encoding='utf-8') as f:
 
 
 class Clients:
+    '''
+    The Clients class provides information about customers, their bookings and payments.
+
+    Attributes:
+    - names (list): A list of customer names.
+    - data_books (list): A list of booking dates.
+    - - plus (list): The list of rooms.
+    - - data_array (list): A list of check-in dates.
+    - days (list): A list of the number of days of stay.
+    - sums (list): A list of payment amounts.
+    - all_days (list): A list of all the days of the clients' stay.
+    - data_income (dict): A dictionary with income data for each day of the customer's stay.
+    - data_without_income (dict): A dictionary with income data excluding customer stays.
+    '''
     names = []
     data_books = []
     pls = []
@@ -56,6 +111,12 @@ class Clients:
     data_without_income = {}
 
     def __init__(self, ptr):
+        '''
+        Initializes the Clients object with data about the client and his booking.
+
+        Arguments:
+        - ptr (str): A string of customer and booking data in the format "data_book name surname patronymic room_number date_of_arrival days_sum total_sum".
+        '''
         ptr = ptr.split()
         self.data_book = ptr[0]
         self.name = ptr[1] + ' ' + ptr[2] + ' ' + ptr[3]
@@ -71,6 +132,15 @@ class Clients:
         Clients.sums.append(self.sum)
 
     def need_dates(self):
+        '''
+        Calculates the list of dates of the client's stay.
+
+        Args:
+        -self: Object instance of Clients.
+
+        Returns:
+        - need_dates (list): A list of the dates of the client's stay.
+        '''
         need_dates = []
         first_data = self.data_arr.split('.')
         for i in range(int(self.days)):
@@ -87,6 +157,14 @@ class Clients:
         return need_dates
 
     def placing_people(self):
+        '''
+        Place clients in available rooms based on their requests and handle booking process.
+
+        Args:
+        -self: Object instance of Clients.
+
+        Returns: None
+        '''
         option = []
 
         prices_of_options = {}
