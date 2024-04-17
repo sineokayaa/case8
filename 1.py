@@ -1,4 +1,5 @@
 import random
+import RU_LOCAL as RU
 
 
 class Hotel:
@@ -8,9 +9,9 @@ class Hotel:
     max_ppls = {}
     comforts = []
     booked_dates = []
-    price_type = {'одноместный': 2900, 'двухместный': 2300, 'полулюкс': 3200, 'люкс': 4100}
-    comfort_price = {'стандарт': 1, 'стандарт_улучшенный': 1.2, 'апартамент': 1.5}
-    food_price = {'полупансион': 1000, 'завтрак': 280, 'без питания': 0}
+    price_type = {RU.ONE_PLACE: 2900, RU.SECOND_PLACE: 2300, RU.SEMILUXE: 3200, RU.LUXE: 4100}
+    comfort_price = {RU.STANDART: 1, RU.STANDART_UP: 1.2, RU.APART: 1.5}
+    food_price = {RU.HALF_BOARD: 1000, RU.BREAKFAST: 280, RU.WITHOUT_FOOD: 0}
     count_one_place = 0
     count_second_place = 0
     count_semiluxe = 0
@@ -20,13 +21,13 @@ class Hotel:
         ptr = ptr.split()
         self.num = int(ptr[0])
         self.type = ptr[1]
-        if self.type == 'одноместный':
+        if self.type == RU.ONE_PLACE:
             Hotel.count_one_place += 1
-        if self.type == 'двухместный':
+        if self.type == RU.SECOND_PLACE:
             Hotel.count_second_place += 1
-        if self.type == 'полулюкс':
+        if self.type == RU.SEMILUXE:
             Hotel.count_semiluxe += 1
-        if self.type == 'люкс':
+        if self.type == RU.LUXE:
             Hotel.count_luxe += 1
         self.max_ppl = int(ptr[2])
         self.comfort = ptr[3]
@@ -115,20 +116,20 @@ class Clients:
                             break
 
                     print(
-                        f'{self.name}, мы можем вам предложить следующий вариант: Номер комнаты: {number_chosen}, '
-                        f'Степень комфортности: {Hotel.comforts[number_chosen - 1]}, Вид питания: {food_chosen}')
-                    answer = random.choices(['Да', 'Нет'], weights=[75, 25])
-                    if answer == ['Да']:
+                        f'{self.name}, {RU.OPTION_ROOM}: {number_chosen}, '
+                        f'{RU.OPTION_COMFORT}: {Hotel.comforts[number_chosen - 1]}, {RU.OPTION_FOOD}: {food_chosen}')
+                    answer = random.choices([RU.YES, RU.NO], weights=[75, 25])
+                    if answer == [RU.YES]:
                         Hotel.booked_dates[room - 1] += need_dates
                         for dates in need_dates:
                             Clients.data_income[dates] += summ_of_room + Hotel.food_price[food_chosen] * int(self.pl)
                         break
                     else:
-                        print(f'{self.name}, хорошо, поищем другие варианты')
+                        print(f'{self.name}, {RU.OTHER_OPTION}')
                         if room == list(prices_of_options.keys())[-1]:
                             for dates in need_dates:
                                 Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
-                            print(f'{self.name}, не можем вас заселить')
+                            print(f'{self.name}, {RU.CANT_BOOK}')
                         else:
                             continue
                 else:
@@ -136,7 +137,7 @@ class Clients:
             if number_chosen == 0:
                 for dates in need_dates:
                     Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
-                print(f'{self.name}, не можем вас заселить')
+                print(f'{self.name}, {RU.CANT_BOOK}')
         else:
             for i in Hotel.max_ppls:
                 if Hotel.max_ppls[i] == int(self.pl) + 1:
@@ -160,21 +161,21 @@ class Clients:
                                 food_chosen = j
                                 break
                         print(
-                            f'{self.name}, мы можем вам предложить следующий вариант: Номер комнаты: {number_chosen}, '
-                            f'Степень комфортности: {Hotel.comforts[number_chosen - 1]}, Вид питания: {food_chosen}')
-                        answer = random.choices(['Да', 'Нет'], weights=[75, 25])
-                        if answer == ['Да']:
+                            f'{self.name}, {RU.OPTION_ROOM}: {number_chosen}, '
+                            f'{RU.OPTION_COMFORT}: {Hotel.comforts[number_chosen - 1]}, {RU.OPTION_FOOD}: {food_chosen}')
+                        answer = random.choices([RU.YES, RU.NO], weights=[75, 25])
+                        if answer == [RU.YES]:
                             Hotel.booked_dates[room - 1] += need_dates
                             for dates in need_dates:
                                 Clients.data_income[dates] += summ_of_room + Hotel.food_price[food_chosen] * int(
                                     self.pl)
                             break
                         else:
-                            print(f'{self.name}, хорошо, поищем другие варианты')
+                            print(f'{self.name}, {RU.OTHER_OPTION}')
                             if room == list(prices_of_options.keys())[-1]:
                                 for dates in need_dates:
                                     Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
-                                print(f'{self.name}, не можем вас заселить')
+                                print(f'{self.name}, {RU.CANT_BOOK}')
                             else:
                                 continue
                     else:
@@ -182,11 +183,11 @@ class Clients:
                 if number_chosen == 0:
                     for dates in need_dates:
                         Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
-                    print(f'{self.name}, не можем вас заселить')
+                    print(f'{self.name}, {RU.CANT_BOOK}')
             else:
                 for dates in need_dates:
                     Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
-                return (f'{self.name}, не можем вас заселить')
+                print(f'{self.name}, {RU.CANT_BOOK}')
 
 
 with open('booking.txt', encoding='utf-8') as f:
@@ -203,35 +204,34 @@ with open('results.txt', 'w', encoding='utf-8') as res:
         count_luxe_b = 0
         for room in Hotel.booked_dates:
             if day in room:
-                if Hotel.types[Hotel.booked_dates.index(room)] == 'одноместный':
+                if Hotel.types[Hotel.booked_dates.index(room)] == RU.ONE_PLACE:
                     count_one_place_b += 1
-                elif Hotel.types[Hotel.booked_dates.index(room)] == 'двухместный':
+                elif Hotel.types[Hotel.booked_dates.index(room)] == RU.SECOND_PLACE:
                     count_second_place_b += 1
-                elif Hotel.types[Hotel.booked_dates.index(room)] == 'полулюкс':
+                elif Hotel.types[Hotel.booked_dates.index(room)] == RU.SEMILUXE:
                     count_semiluxe_b += 1
-                elif Hotel.types[Hotel.booked_dates.index(room)] == 'люкс':
+                elif Hotel.types[Hotel.booked_dates.index(room)] == RU.LUXE:
                     count_luxe_b += 1
                 count_booked += 1
 
-
-        print(f'Количество занятых номеров на {day}: {count_booked}', file=res)
-        print(f'Количество свободных номеров на {day}: {len(Hotel.nums) - count_booked}', file=res)
-        print(f'Процент загруженности гостиницы на {day}: {round(count_booked / len(Hotel.nums) * 100, 2)}%', file=res)
+        print(f'{RU.BOOKED_ROOMS} {day}: {count_booked}', file=res)
+        print(f'{RU.NOT_BOOKED_ROOMS} {day}: {len(Hotel.nums) - count_booked}', file=res)
+        print(f'{RU.PERC_BOOKED_HOTEL} {day}: {round(count_booked / len(Hotel.nums) * 100, 2)}%', file=res)
         print(
-            f'Процент загруженности одноместных номеров на {day}: '
+            f'{RU.PERC_BOOKED_ONE_PLACE} {day}: '
             f'{round(count_one_place_b / Hotel.count_one_place * 100, 2)}%',
             file=res)
         print(
-            f'Процент загруженности двухместных номеров на {day}: '
+            f'{RU.PERC_BOOKED_SECOND_PLACE} {day}: '
             f'{round(count_second_place_b / Hotel.count_second_place * 100, 2)}%',
             file=res)
         print(
-            f'Процент загруженности полулюкс номеров на {day}:'
+            f'{RU.PERC_BOOKED_SEMILUXE} {day}:'
             f' {round(count_semiluxe_b / Hotel.count_semiluxe * 100, 2)}%',
             file=res)
-        print(f'Процент загруженности люкс номеров на {day}: '
+        print(f'{RU.PERC_BOOKED_LUXE} {day}: '
               f'{round(count_luxe_b / Hotel.count_luxe * 100, 2)}%',
               file=res)
-        print(f'Полученный доход за {day}: {Clients.data_income[day]}', file=res)
-        print(f'Упущенный доход за {day}: {Clients.data_without_income[day]}', file=res)
+        print(f'{RU.GET_INCOME} {day}: {Clients.data_income[day]}', file=res)
+        print(f'{RU.MISSED_INCOME} {day}: {Clients.data_without_income[day]}', file=res)
         print(file=res)
