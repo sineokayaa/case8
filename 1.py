@@ -92,8 +92,8 @@ class Clients:
     Attributes:
     - names (list): A list of customer names.
     - data_books (list): A list of booking dates.
-    - - plus (list): The list of rooms.
-    - - data_array (list): A list of check-in dates.
+    - plus (list): The list of rooms.
+    - data_array (list): A list of check-in dates.
     - days (list): A list of the number of days of stay.
     - sums (list): A list of payment amounts.
     - all_days (list): A list of all the days of the clients' stay.
@@ -171,16 +171,15 @@ class Clients:
         number_chosen = 0
         food_chosen = ''
         need_dates = Clients.need_dates(self)
-        for i in Hotel.max_ppls:  # num of room
-
+        for i in Hotel.max_ppls:
             if str(Hotel.max_ppls[i]) == self.pl:
                 if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
                     option.append(i)
-        if option != []:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
+        if option != []:
             for number in option:
-                prices_of_options[number] = Hotel.price_of_room[number]  # соединяем номер с его ценой
+                prices_of_options[number] = Hotel.price_of_room[number]
             prices_of_options = dict(
-                sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))  # сначала самые дорогие номера
+                sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))
             for room in prices_of_options:
                 if prices_of_options[room] <= int(self.sum) * int(self.pl):
                     number_chosen = room
@@ -221,11 +220,11 @@ class Clients:
                 if Hotel.max_ppls[i] == int(self.pl) + 1:
                     if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
                         option.append(i)
-            if option != []:  # в опшн у нас номера комнат,совпадающих по вместимости с нужной нам!
+            if option != []:
                 for number in option:
-                    prices_of_options[number] = Hotel.price_of_room[number] * 0.7  # соединяем номер с его ценой
+                    prices_of_options[number] = Hotel.price_of_room[number] * 0.7
                 prices_of_options = dict(
-                    sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))  # сначала самые дорогие номера
+                    sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))
                 for room in prices_of_options:
                     if prices_of_options[room] <= int(self.sum) * int(self.pl):
                         number_chosen = room
