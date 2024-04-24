@@ -62,6 +62,7 @@ class Hotel:
         ptr = ptr.split()
         self.num = int(ptr[0])
         self.type = ptr[1]
+
         if self.type == RU.ONE_PLACE:
             Hotel.count_one_place += 1
         if self.type == RU.SECOND_PLACE:
@@ -70,8 +71,10 @@ class Hotel:
             Hotel.count_semiluxe += 1
         if self.type == RU.LUXE:
             Hotel.count_luxe += 1
+
         self.max_ppl = int(ptr[2])
         self.comfort = ptr[3]
+
         Hotel.nums.append(self.num)
         Hotel.types.append(self.type)
         Hotel.max_ppls[self.num] = self.max_ppl
@@ -124,6 +127,7 @@ class Clients:
         self.data_arr = ptr[5]
         self.days = ptr[6]
         self.sum = ptr[7]
+
         Clients.data_books.append(self.data_book)
         Clients.names.append(self.name)
         Clients.pls.append(self.pl)
@@ -143,12 +147,14 @@ class Clients:
         '''
         need_dates = []
         first_data = self.data_arr.split('.')
+
         for i in range(int(self.days)):
             if int(first_data[0]) + int(i) <= 9:
                 new_data = '0' + str(int(first_data[0]) + int(i)) + '.' + first_data[1] + '.' + first_data[2]
             else:
                 new_data = str(int(first_data[0]) + int(i)) + '.' + first_data[1] + '.' + first_data[2]
             need_dates.append(new_data)
+
         for days in need_dates:
             if days not in Clients.all_days:
                 Clients.all_days.append(days)
@@ -171,20 +177,24 @@ class Clients:
         number_chosen = 0
         food_chosen = ''
         need_dates = Clients.need_dates(self)
+
         for i in Hotel.max_ppls:
             if str(Hotel.max_ppls[i]) == self.pl:
                 if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
                     option.append(i)
+
         if option != []:
             for number in option:
                 prices_of_options[number] = Hotel.price_of_room[number]
             prices_of_options = dict(
                 sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))
+
             for room in prices_of_options:
                 if prices_of_options[room] <= int(self.sum) * int(self.pl):
                     number_chosen = room
                     summ_of_room = prices_of_options[room]
                     summ_of_food = int(self.sum) * int(self.pl) - summ_of_room
+
                     for j in Hotel.food_price:
                         if summ_of_food < Hotel.food_price[j] * int(self.pl):
                             continue
@@ -196,6 +206,7 @@ class Clients:
                         f'{self.name}, {RU.OPTION_ROOM}: {number_chosen}, '
                         f'{RU.OPTION_COMFORT}: {Hotel.comforts[number_chosen - 1]}, {RU.OPTION_FOOD}: {food_chosen}')
                     answer = random.choices([RU.YES, RU.NO], weights=[75, 25])
+
                     if answer == [RU.YES]:
                         Hotel.booked_dates[room - 1] += need_dates
                         for dates in need_dates:
@@ -203,14 +214,17 @@ class Clients:
                         break
                     else:
                         print(f'{self.name}, {RU.OTHER_OPTION}')
+
                         if room == list(prices_of_options.keys())[-1]:
                             for dates in need_dates:
                                 Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
+
                             print(f'{self.name}, {RU.CANT_BOOK}')
                         else:
                             continue
                 else:
                     continue
+
             if number_chosen == 0:
                 for dates in need_dates:
                     Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
@@ -220,11 +234,13 @@ class Clients:
                 if Hotel.max_ppls[i] == int(self.pl) + 1:
                     if set(need_dates) & set(Hotel.booked_dates[i - 1]) == set():
                         option.append(i)
+
             if option != []:
                 for number in option:
                     prices_of_options[number] = Hotel.price_of_room[number] * 0.7
                 prices_of_options = dict(
                     sorted(prices_of_options.items(), key=lambda x: x[1], reverse=True))
+
                 for room in prices_of_options:
                     if prices_of_options[room] <= int(self.sum) * int(self.pl):
                         number_chosen = room
@@ -240,6 +256,7 @@ class Clients:
                         print(
                             f'{self.name}, {RU.OPTION_ROOM}: {number_chosen}, '
                             f'{RU.OPTION_COMFORT}: {Hotel.comforts[number_chosen - 1]}, {RU.OPTION_FOOD}: {food_chosen}')
+
                         answer = random.choices([RU.YES, RU.NO], weights=[75, 25])
                         if answer == [RU.YES]:
                             Hotel.booked_dates[room - 1] += need_dates
@@ -249,6 +266,7 @@ class Clients:
                             break
                         else:
                             print(f'{self.name}, {RU.OTHER_OPTION}')
+
                             if room == list(prices_of_options.keys())[-1]:
                                 for dates in need_dates:
                                     Clients.data_without_income[dates] += int(self.sum) * int(self.pl)
@@ -279,6 +297,7 @@ with open('results.txt', 'w', encoding='utf-8') as res:
         count_second_place_b = 0
         count_semiluxe_b = 0
         count_luxe_b = 0
+
         for room in Hotel.booked_dates:
             if day in room:
                 if Hotel.types[Hotel.booked_dates.index(room)] == RU.ONE_PLACE:
